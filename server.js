@@ -216,7 +216,8 @@ async function connectToLive(serverId, username) {
     session.connected = false;
     session.lastError = err?.message || String(err);
     safeDisconnect(session, serverId);
-    console.error(`❌ [${serverId}] Failed to connect to @${cleanUsername}:`, session.lastError);
+    console.error(`❌ [${serverId}] Failed to connect to @${cleanUsername}:`, err);
+	console.error(`❌ [${serverId}] Failed to connect to @${cleanUsername}:`, err?.message);
     throw err;
   }
 }
@@ -243,10 +244,11 @@ app.get("/connect", async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({
-      ok: false,
-      error: err?.message || String(err),
-      serverId,
-    });
+  		ok: false,
+  		error: err?.message || String(err),
+ 	 	fullError: String(err),
+ 	 	serverId,
+	});
   }
 });
 
